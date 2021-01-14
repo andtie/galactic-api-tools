@@ -33,12 +33,21 @@ public final class Faker {
 
     public func generateJSON() throws -> Data {
         let value = try generateJSON(hint: nil)
-        #if os(Linux)
-            let options: JSONSerialization.WritingOptions = [.prettyPrinted, .sortedKeys]
-        #else
-            let options: JSONSerialization.WritingOptions = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-        #endif
         return try JSONSerialization.data(withJSONObject: value, options: options)
+    }
+
+    var options: JSONSerialization.WritingOptions {
+        #if os(Linux)
+            return [.prettyPrinted, .sortedKeys]
+        #else
+            if #available(macOS 10.15, iOS 13.0, *) {
+                return [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+            } else if #available(macOS 10.13, iOS 11.0, *) {
+                return [.prettyPrinted, .sortedKeys]
+            } else {
+                return [.prettyPrinted]
+            }
+        #endif
     }
 
     private func generateJSON(hint: String?) throws -> Any {

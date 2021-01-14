@@ -5,7 +5,6 @@ import PackageDescription
 
 let package = Package(
     name: "galactic-api-tools",
-    platforms: [.macOS(.v10_15)],
     products: [
         .library(name: "OpenAPI", targets: ["OpenAPI"]),
         .library(name: "OpenAPIDecoder", targets: ["OpenAPIDecoder"]),
